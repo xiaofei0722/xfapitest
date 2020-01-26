@@ -21,5 +21,5 @@ class ApiHttpbinPost(BaseApi):
     method = "POST"
     headers = {"accept":"application/json"}
     json = {"abc":123}
-    data = "abc=123"
+
 

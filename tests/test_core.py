@@ -32,7 +32,8 @@ def test_httpbin_post_json():
         .validate("status_code",200) \
         .validate("headers.server", "gunicorn/19.9.0") \
         .validate("json.headers.Accept", "application/json") \
-        .validate("json.url", "https://httpbin.org/post")
+        .validate("json.url", "https://httpbin.org/post")\
+        .validate("json().json.abc",666)
 
 def test_httpbin_post_data():
     ApiHttpbinPost() \
@@ -42,3 +43,21 @@ def test_httpbin_post_data():
         .validate("headers.server", "gunicorn/19.9.0") \
         .validate("json.headers.Accept", "application/json") \
         .validate("json.url", "https://httpbin.org/post")
+
+def test_httpbin_parameters_share():
+    user_id = "adk129"
+    ApiHttpbinGet() \
+        .set_params(user_id=user_id) \
+        .run() \
+        .validate("status_code", 200) \
+        .validate("headers.server", "gunicorn/19.9.0") \
+        .validate("json().url", "https://httpbin.org/get?user_id={}".format(user_id)) \
+        .validate("json().headers.Accept", "application/json")
+    ApiHttpbinPost() \
+        .set_json({"user_id":user_id}) \
+        .run() \
+        .validate("status_code", 200) \
+        .validate("headers.server", "gunicorn/19.9.0") \
+        .validate("json.headers.Accept", "application/json") \
+        .validate("json.url", "https://httpbin.org/post") \
+        .validate("json().json.user_id", "adk129")
