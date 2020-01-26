@@ -42,12 +42,21 @@ def test_httpbin_get_with_params():
         .validate("json().url","https://httpbin.org/get?xxx=555&abc=666") \
         .validate("json().headers.Accept", "application/json")
 
-def test_httpbin_post():
+def test_httpbin_post_json():
 
     ApiHttpbinPost()\
         .set_json({"abc":666})\
         .run()\
         .validate("status_code",200) \
+        .validate("headers.server", "gunicorn/19.9.0") \
+        .validate("json.headers.Accept", "application/json") \
+        .validate("json.url", "https://httpbin.org/post")
+
+def test_httpbin_post_data():
+    ApiHttpbinPost() \
+        .set_data("abc=666") \
+        .run() \
+        .validate("status_code", 200) \
         .validate("headers.server", "gunicorn/19.9.0") \
         .validate("json.headers.Accept", "application/json") \
         .validate("json.url", "https://httpbin.org/post")
