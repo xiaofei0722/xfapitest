@@ -1,6 +1,6 @@
 import json
 
-from tests.api.httpbin import ApiHttpbinGet, ApiHttpbinPost
+from tests.api.httpbin import ApiHttpbinGet, ApiHttpbinPost, ApiHttpbinGetCookies
 from xf_apitest.api import BaseApi
 
 
@@ -61,3 +61,13 @@ def test_httpbin_parameters_share():
         .validate("json.headers.Accept", "application/json") \
         .validate("json.url", "https://httpbin.org/post") \
         .validate("json().json.user_id", "adk129")
+
+def test_httpbin_extract():
+    status_code = ApiHttpbinGet().run().extract("status_code")
+    assert status_code==200
+
+#
+# def test_httpbin_parameters_extract():
+#     ApiHttpbinGetCookies()\
+#         .run().extract("status_code")
+

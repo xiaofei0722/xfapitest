@@ -41,6 +41,10 @@ class BaseApi(object):
                                          headers=self.headers,
                                          data=self.data)
         return self
+
+    def extract(self,field):
+        value = getattr(self.response,field)
+        return value
     def set_data(self,data):
         self.data = data
         return self

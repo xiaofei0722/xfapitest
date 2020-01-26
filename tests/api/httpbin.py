@@ -22,4 +22,10 @@ class ApiHttpbinPost(BaseApi):
     headers = {"accept":"application/json"}
     json = {"abc":123}
 
+class ApiHttpbinGetCookies(BaseApi):
+
+    url = "https://httpbin.org/cookies"
+    params = {}
+    method = "GET"
+    headers = {"accept":"application/json"}
 
