@@ -63,9 +63,15 @@ def test_httpbin_parameters_share():
         .validate("json().json.user_id", "adk129")
 
 def test_httpbin_extract():
-    status_code = ApiHttpbinGet().run().extract("status_code")
-    assert status_code==200
+    api_run = ApiHttpbinGet().run()
+    status_code = api_run.extract("status_code")
+    assert status_code == 200
 
+    server = api_run.extract("headers.server")
+    assert server == "gunicorn/19.9.0"
+
+    accp = api_run.extract("json().headers.Accept")
+    assert accp =="application/json"
 #
 # def test_httpbin_parameters_extract():
 #     ApiHttpbinGetCookies()\
