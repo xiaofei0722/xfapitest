@@ -21,7 +21,7 @@ class BaseApi(object):
         for _key in key.split("."):
             # print("key------",_key,"value------",value)
             if isinstance(value,requests.Response):
-                if _key == "json()":
+                if _key in ["json()","json"]:
                     value = self.response.json()
                 else:
                     value = getattr(self.response, _key)

@@ -49,5 +49,5 @@ def test_httpbin_post():
         .run()\
         .validate("status_code",200) \
         .validate("headers.server", "gunicorn/19.9.0") \
-        .validate("json().headers.Accept", "application/json") \
-        .validate("json().url", "https://httpbin.org/post")
+        .validate("json.headers.Accept", "application/json") \
+        .validate("json.url", "https://httpbin.org/post")
