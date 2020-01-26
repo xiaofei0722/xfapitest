@@ -1,3 +1,6 @@
+import json
+import logging
+
 import requests
 
 class BaseApi(object):
@@ -14,7 +17,20 @@ class BaseApi(object):
         return self
 
     def validate(self,key,expected_value):
-        actual_value = getattr(self.response,key)
+        value = self.response
+        for _key in key.split("."):
+            # print("key------",_key,"value------",value)
+            if isinstance(value,requests.Response):
+                if _key == "json()":
+                    value = self.response.json()
+                else:
+                    value = getattr(self.response, _key)
+            elif isinstance(value,(requests.structures.CaseInsensitiveDict,dict)):
+                value = value[_key]
+        print(json.dumps(self.response.json(),indent=2))
+        print(value)
+        print(expected_value)
+        assert value == expected_value
         return self
 
     def run(self):

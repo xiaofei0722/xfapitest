@@ -27,19 +27,27 @@ def test_httpbin_get():
 
     ApiHttpbinGet().run()\
         .validate("status_code",200)\
-        # .validate("headers.server","nginx")\
-        # .validate("json.url","https://httpbin.org/get")
+        .validate("headers.server","gunicorn/19.9.0")\
+        .validate("json().url","https://httpbin.org/get")\
+        .validate("json().headers.Accept","application/json")\
+        .validate("json().args",{})
 
 def test_httpbin_get_with_params():
 
     ApiHttpbinGet()\
         .set_params(xxx=555,abc=666)\
         .run()\
-        .validate("status_code",200)
+        .validate("status_code",200) \
+        .validate("headers.server", "gunicorn/19.9.0")\
+        .validate("json().url","https://httpbin.org/get?xxx=555&abc=666") \
+        .validate("json().headers.Accept", "application/json")
 
 def test_httpbin_post():
 
     ApiHttpbinPost()\
         .set_json({"abc":666})\
         .run()\
-        .validate("status_code",200)
+        .validate("status_code",200) \
+        .validate("headers.server", "gunicorn/19.9.0") \
+        .validate("json().headers.Accept", "application/json") \
+        .validate("json().url", "https://httpbin.org/post")
