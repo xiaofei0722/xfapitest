@@ -1,6 +1,6 @@
 import json
 
-from tests.api.httpbin import ApiHttpbinGet, ApiHttpbinPost, ApiHttpbinGetCookies
+from tests.api.httpbin import *
 from xf_apitest.api import BaseApi
 
 
@@ -100,3 +100,15 @@ def test_httpbin_parameters_extract():
         .validate("json.headers.Accept", "application/json") \
         .validate("json.url", "https://httpbin.org/post")\
         .validate("json.json.freefrom",freefrom)
+
+def test_httpbin_login_status():
+    ApiHttpbinGetSetCookies().set_params(freefrom="678")\
+        .run()
+
+    resp = ApiHttpbinPost() \
+        .set_json({"abc": 123}) \
+        .run() \
+        .get_response()
+
+    request_headers = resp.request.headers
+    assert "freefrom=678" in request_headers["Cookie"]

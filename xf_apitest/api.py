@@ -3,6 +3,7 @@ import logging
 
 import requests
 
+session = requests.sessions.Session()
 class BaseApi(object):
 
     method = ""
@@ -13,26 +14,31 @@ class BaseApi(object):
     data = {}
     json = {}
 
+    def __init__(self):
+        self.response = None
+
     def set_params(self, **params):
         self.params = params
         return self
 
     def validate(self,key,expected_value):
-        print(json.dumps(self.response.json(),indent=2))
-        print(key)
-        print(expected_value)
+        print("响应数据===============",json.dumps(self.response.json(),indent=2))
+        print("字段路径===============",key)
+        print("预期结果===============",expected_value)
         actual_value = self.extract(key)
+        print("实际结果===============",actual_value)
         assert actual_value == expected_value
         return self
 
     def run(self):
-        self.response = requests.request(self.method,
-                                         self.url,
-                                         params=self.params,
-                                         json=self.json,
-                                         cookies=self.cookies,
-                                         headers=self.headers,
-                                         data=self.data)
+        self.response = session.request(
+            self.method,
+             self.url,
+             params=self.params,
+             json=self.json,
+             cookies=self.cookies,
+             headers=self.headers,
+             data=self.data)
         return self
 
     def extract(self,field):
@@ -58,3 +64,6 @@ class BaseApi(object):
     def set_cookie(self,key,value):
         self.cookies.update({key:value})
         return self
+
+    def get_response(self):
+        return self.response

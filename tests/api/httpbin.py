@@ -29,3 +29,9 @@ class ApiHttpbinGetCookies(BaseApi):
     method = "GET"
     headers = {"accept":"application/json"}
 
+class ApiHttpbinGetSetCookies(BaseApi):
+
+    url = "https://httpbin.org/cookies/set"
+    params = {}
+    method = "GET"
+    headers = {"accept":"text/plain"}
