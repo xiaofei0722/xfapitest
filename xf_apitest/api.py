@@ -9,6 +9,7 @@ class BaseApi(object):
     url = ""
     params = {}
     headers = {}
+    cookies = {}
     data = {}
     json = {}
 
@@ -29,6 +30,7 @@ class BaseApi(object):
                                          self.url,
                                          params=self.params,
                                          json=self.json,
+                                         cookies=self.cookies,
                                          headers=self.headers,
                                          data=self.data)
         return self
@@ -44,10 +46,15 @@ class BaseApi(object):
             elif isinstance(value, (requests.structures.CaseInsensitiveDict, dict)):
                 value = value[_key]
         return value
+
     def set_data(self,data):
         self.data = data
         return self
 
     def set_json(self,json):
         self.json = json
+        return self
+
+    def set_cookie(self,key,value):
+        self.cookies.update({key:value})
         return self

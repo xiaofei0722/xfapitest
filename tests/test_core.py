@@ -72,8 +72,31 @@ def test_httpbin_extract():
 
     accp = api_run.extract("json().headers.Accept")
     assert accp =="application/json"
-#
-# def test_httpbin_parameters_extract():
-#     ApiHttpbinGetCookies()\
-#         .run().extract("status_code")
 
+
+def test_httpbin_setcookies():
+    api_run = ApiHttpbinGetCookies()\
+        .set_cookie("freefrom1","123")\
+        .set_cookie("freefrom2","456")\
+        .run()
+
+    freefrom1 = api_run.extract("json.cookies.freefrom1")
+    freefrom2 = api_run.extract("json.cookies.freefrom2")
+    assert freefrom1 == "123"
+    assert freefrom2 == "456"
+
+def test_httpbin_parameters_extract():
+    freefrom = ApiHttpbinGetCookies()\
+        .set_cookie("freefrom","123")\
+        .run()\
+        .extract("json.cookies.freefrom")
+    assert freefrom == "123"
+
+    ApiHttpbinPost() \
+        .set_json({"freefrom":freefrom}) \
+        .run() \
+        .validate("status_code", 200) \
+        .validate("headers.server", "gunicorn/19.9.0") \
+        .validate("json.headers.Accept", "application/json") \
+        .validate("json.url", "https://httpbin.org/post")\
+        .validate("json.json.freefrom",freefrom)
