@@ -101,13 +101,15 @@ def test_httpbin_parameters_extract():
         .validate("json.url", "https://httpbin.org/post")\
         .validate("json.json.freefrom",freefrom)
 
-def test_httpbin_login_status():
+
+def test_httpbin_login_status(init_session):
+
     ApiHttpbinGetSetCookies().set_params(freefrom="678")\
-        .run()
+        .run(init_session)
 
     resp = ApiHttpbinPost() \
         .set_json({"abc": 123}) \
-        .run() \
+        .run(init_session) \
         .get_response()
 
     request_headers = resp.request.headers

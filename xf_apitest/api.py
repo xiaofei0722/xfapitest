@@ -1,9 +1,7 @@
 import json
 import logging
-
 import requests
 
-session = requests.sessions.Session()
 class BaseApi(object):
 
     method = ""
@@ -30,7 +28,8 @@ class BaseApi(object):
         assert actual_value == expected_value
         return self
 
-    def run(self):
+    def run(self,session=None):
+        session=session or requests.sessions.Session()
         self.response = session.request(
             self.method,
              self.url,
